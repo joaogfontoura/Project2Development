@@ -12,12 +12,11 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import org.w3c.dom.Text;
-
 public class MainPage extends AppCompatActivity {
     private TextView username;
     private Button Btn;
     private Button BtnLocation;
+    private Button BtnAttractions;
     private FirebaseAuth mAuth;
     ProgressBar progressBar;
 
@@ -32,6 +31,7 @@ public class MainPage extends AppCompatActivity {
         username = findViewById(R.id.userEmail);
         Btn = findViewById(R.id.btnlogout);
         BtnLocation = findViewById(R.id.btnLocation);
+        BtnAttractions = findViewById(R.id.btnAttractions);
         progressBar = findViewById(R.id.progressBar);
 
         // get current user information
@@ -42,6 +42,7 @@ public class MainPage extends AppCompatActivity {
 
         Btn.setOnClickListener(new LogoutBtnListener());
         BtnLocation.setOnClickListener(new LocationBtnListener());
+        BtnAttractions.setOnClickListener(new AttractionsBtnListener());
     }
 
     class LogoutBtnListener implements View.OnClickListener {
@@ -59,4 +60,12 @@ public class MainPage extends AppCompatActivity {
             finish();
         }
     }
+    class AttractionsBtnListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            startActivity(new Intent(getApplicationContext(), AttractionPage.class));
+            finish();
+        }
+    }
+
 }

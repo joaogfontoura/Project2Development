@@ -7,6 +7,20 @@
     android:background="#0A91AB"
     tools:context=".MainPage">
 
+    <Button
+        android:id="@+id/btnAttractions"
+        android:layout_width="203dp"
+        android:layout_height="55dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/buttonyellow"
+        android:text="Show Attractions"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.721" />
+
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="309dp"
@@ -43,7 +57,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.71" />
+        app:layout_constraintVertical_bias="0.597" />
 
     <Button
         android:id="@+id/btnlogout"
