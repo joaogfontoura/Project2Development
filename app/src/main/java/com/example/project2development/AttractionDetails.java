@@ -53,7 +53,7 @@ public class AttractionDetails extends AppCompatActivity {
 
     private void getDataFromFirebase(String id) {
 
-        DocumentReference mDocRef = db.collection("attractions").document(id);
+        DocumentReference mDocRef = db.collection("Attraction Collection").document(id);
 
         mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override

@@ -53,7 +53,7 @@ public class AttractionMenu extends AppCompatActivity implements OnMapReadyCallb
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private CollectionReference mColRef = db.collection("attractions");
+    private CollectionReference mColRef = db.collection("Attraction Collection");
 
 
     @Override
@@ -110,11 +110,7 @@ public class AttractionMenu extends AppCompatActivity implements OnMapReadyCallb
             public boolean onMarkerClick(Marker marker) {
                 if(!"You are Here".equals(marker.getTitle())){
 
-
                     String attId = marker.getSnippet();
-
-
-
 
                     Intent markerDetails = new Intent(getApplicationContext(), AttractionDetails.class);
 
