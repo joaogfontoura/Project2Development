@@ -17,7 +17,6 @@
         <activity android:name=".AttractionMenu" />
         <activity android:name=".AttractionRegistration"></activity>
         <activity android:name=".AttractionPage" />
-        <activity android:name=".AttractionMenu" />
         <activity android:name=".MainPage" />
         <activity
             android:name=".MainActivity"
