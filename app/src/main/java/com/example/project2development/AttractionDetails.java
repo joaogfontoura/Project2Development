@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +33,7 @@ public class AttractionDetails extends AppCompatActivity {
     ImageView AttImg;
     TextView AttTitle;
     TextView AttDescription;
+    private Button BtnAddReview;
 
 
     public static String title = "";
@@ -65,6 +69,10 @@ public class AttractionDetails extends AppCompatActivity {
         getDataFromFirebase(id);
 
         displayDataRecyclerView(id);
+
+        BtnAddReview = findViewById(R.id.btnAddReview);
+
+        BtnAddReview.setOnClickListener(new AttractionDetails.AddReviewsBtnListener());
 
 
     }
@@ -123,6 +131,12 @@ public class AttractionDetails extends AppCompatActivity {
 
 
 
-
+    }
+    class AddReviewsBtnListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            startActivity(new Intent(getApplicationContext(), ReviewRegistration.class));
+            finish();
+        }
     }
 }

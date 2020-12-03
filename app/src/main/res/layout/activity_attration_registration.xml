@@ -44,24 +44,24 @@
 
     <EditText
         android:id="@+id/textviewDesc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="184dp"
+        android:layout_width="377dp"
+        android:layout_height="98dp"
+        android:layout_marginEnd="16dp"
         android:ems="10"
+        android:hint="Description"
         android:inputType="textPersonName"
-        android:text="Description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/attractionPic"
-        app:layout_constraintVertical_bias="0.237" />
+        app:layout_constraintVertical_bias="0.272" />
 
     <EditText
         android:id="@+id/textviewLoc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="Location"
         android:inputType="textPersonName"
-        android:text="Location"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.079"
@@ -74,8 +74,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="Name"
         android:inputType="textPersonName"
-        android:text="Name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
