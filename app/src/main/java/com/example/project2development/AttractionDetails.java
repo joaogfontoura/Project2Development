@@ -42,8 +42,8 @@ public class AttractionDetails extends AppCompatActivity {
 
     CustomAdapter customAdapter;
     RecyclerView recyclerView;
-    ArrayList<String> arr_title, arr_description, arr_attraction_id, arr_user_email;
-    ArrayList<Long> arr_rating;
+    ArrayList<String> arr_title, arr_description, arr_attraction_id, arr_user_email,arr_rating;
+
 
     // usado pra fazer log.d e debugar as variaveis
     private static final String TAG = "AttractionDetails";
@@ -64,7 +64,7 @@ public class AttractionDetails extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setNestedScrollingEnabled(false);
 
-        String id = getIntent().getStringExtra("Id");
+        final String id = getIntent().getStringExtra("Id");
 
         getDataFromFirebase(id);
 
@@ -72,7 +72,12 @@ public class AttractionDetails extends AppCompatActivity {
 
         BtnAddReview = findViewById(R.id.btnAddReview);
 
-        BtnAddReview.setOnClickListener(new AttractionDetails.AddReviewsBtnListener());
+        BtnAddReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addreview(id);
+            }
+        });
 
 
     }
@@ -112,8 +117,9 @@ public class AttractionDetails extends AppCompatActivity {
                         arr_title.add(document.getString("title"));
                         arr_description.add(document.getString("description"));
                         arr_attraction_id.add(document.getString("attraction_id"));
-                        arr_rating.add(document.getLong("rating"));
+                        arr_rating.add(document.getString("rating"));
                         arr_user_email.add(document.getString("user_email"));
+                        Log.d(TAG, "aquuiiiiii: "+document.getString("user_email"));
 
                     }
 
@@ -132,11 +138,14 @@ public class AttractionDetails extends AppCompatActivity {
 
 
     }
-    class AddReviewsBtnListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            startActivity(new Intent(getApplicationContext(), ReviewRegistration.class));
-            finish();
-        }
+
+    private void addreview(String id){
+
+        Intent reviewReg = new Intent(getApplicationContext(), ReviewRegistration.class);
+
+        reviewReg.putExtra("Id",id);
+        startActivity(reviewReg);
+
     }
+
 }

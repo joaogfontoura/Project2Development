@@ -69,7 +69,12 @@ public class AttractionMenu extends AppCompatActivity implements OnMapReadyCallb
 
     }
 
+
     // function used to fetch the location of the user
+
+    // comment para test
+    // test 2
+
     private void fetchLastLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
