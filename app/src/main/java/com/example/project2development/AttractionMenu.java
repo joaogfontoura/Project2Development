@@ -99,16 +99,16 @@ public class AttractionMenu extends AppCompatActivity implements OnMapReadyCallb
         //LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 
         LatLng latLng = new LatLng(-33.87365, 151.20689);
-        Log.d(TAG, "LONG AND LAT"+latLng);
+
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getApplicationContext(), R.raw.map_style));
 
         MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("You are Here").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-        Log.d(TAG, "MARKER OPTIONS"+markerOptions);
+
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         // v = zoom ( bigger value = closer in zoom )
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,14));
         googleMap.addMarker(markerOptions);
-        Log.d(TAG, "GOOGLE MAPS"+googleMap);
+
         populateMarkers(googleMap);
 
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {

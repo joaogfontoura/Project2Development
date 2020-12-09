@@ -13,6 +13,7 @@
         android:layout_width="161dp"
         android:layout_height="51dp"
         android:background="@drawable/buttonyellow"
+        android:enabled="false"
         android:text="Upload"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

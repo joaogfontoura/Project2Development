@@ -127,7 +127,10 @@ public class ReviewRegistration extends AppCompatActivity {
         data.put("user_email",email);
         data.put("attraction_id",id);
         cref.add(data);
-        startActivity(new Intent(getApplicationContext(),AttractionDetails.class));
+
+        Intent attractionDetail = new Intent(getApplicationContext(), AttractionDetails.class);
+        attractionDetail.putExtra("Id",id);
+        startActivity(attractionDetail);
         finish();
 
 

@@ -50,21 +50,21 @@ public class MainPage extends AppCompatActivity {
         public void onClick(View v) {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            finish();
+
         }
     }
     class LocationBtnListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             startActivity(new Intent(getApplicationContext(), AttractionMenu.class));
-            finish();
+
         }
     }
     class AttractionsBtnListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             startActivity(new Intent(getApplicationContext(), AttractionPage.class));
-            finish();
+
         }
     }
 

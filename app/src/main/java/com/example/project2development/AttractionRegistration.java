@@ -76,6 +76,8 @@ public class AttractionRegistration extends AppCompatActivity {
             }
 
         });
+
+
         up.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,6 +94,7 @@ public class AttractionRegistration extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
+        up.setEnabled(true);
         startActivityForResult(intent, 1);
 
     }
@@ -129,7 +132,6 @@ public class AttractionRegistration extends AppCompatActivity {
         data.put("Name",name);
         data.put("Description",description);
 
-        // TO DO : ARRUMAR A LOCATION PRA SER GEOPOINT
         LatLng position = getLocationFromAddress(getApplicationContext(),location);
         double positionLat = position.latitude;
         double positionLng = position.longitude;
@@ -142,10 +144,6 @@ public class AttractionRegistration extends AppCompatActivity {
 
         cref.add(data);
         //
-    }
-
-    private void openPopUpMap(){
-
     }
 
     public LatLng getLocationFromAddress(Context context, String strAddress) {
@@ -202,17 +200,7 @@ public class AttractionRegistration extends AppCompatActivity {
                                     }
                                 });
 
-                       /* Toast.makeText(AttractionRegistration.this,"Image Uploaded", Toast.LENGTH_LONG).show();
-                        Log.d(TAG, "BEFORE");
-                        // TO DO HERE SAVE IMAGE URL
-                        Task<Uri> downloadUri = taskSnapshot.getStorage().getDownloadUrl();
-                        if(downloadUri.isSuccessful()){
-                            String generatedFilePath = downloadUri.getResult().toString();
-                            Log.d(TAG, "THIS IS THE PATH: "+generatedFilePath);
-                        }
-                        Log.d(TAG, "AFTER");
-                        //*/
-                        startActivity(new Intent(getApplicationContext(), AttractionRegistration.class));
+                        startActivity(new Intent(getApplicationContext(), AttractionMenu.class));
                         finish();
 
                     }

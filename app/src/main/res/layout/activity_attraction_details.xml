@@ -82,6 +82,17 @@
         app:layout_constraintTop_toBottomOf="@+id/txtDescription"
         app:layout_constraintVertical_bias="0.047" />
 
+    <Button
+        android:id="@+id/btnRemoveAtt"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/buttonyellow"
+        android:text="Remove Att"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/btnAddReview"
+        app:layout_constraintTop_toTopOf="@+id/btnAddReview" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

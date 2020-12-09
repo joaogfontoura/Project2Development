@@ -18,6 +18,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.AuthResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -26,6 +32,7 @@ public class RegistrationActivity extends AppCompatActivity {
     ProgressBar progressBar;
 
     private FirebaseAuth mAuth;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -87,6 +94,18 @@ public class RegistrationActivity extends AppCompatActivity {
                 {
                     if (task.isSuccessful()) {
                         Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_LONG).show();
+
+                        // CREATE THE USER INFORMATION ON FIRESTORE
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        String uid = user.getUid();
+
+                        CollectionReference cref = db.collection("User");
+
+                        Map<String,Object> data = new HashMap<>();
+                        data.put("Uid",uid);
+                        data.put("Role","user");
+
+                        cref.add(data);
 
                         // if the user created intent to login activity
                         startActivity(new Intent(getApplicationContext(), MainPage.class));
