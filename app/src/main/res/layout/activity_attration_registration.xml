@@ -18,8 +18,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/attractionPic"
-        app:layout_constraintVertical_bias="0.799" />
+        app:layout_constraintTop_toBottomOf="@+id/imageButton"
+        app:layout_constraintVertical_bias="0.775" />
 
     <ImageView
         android:id="@+id/attractionPic"
@@ -37,7 +37,9 @@
         android:id="@+id/textviewImg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Click to insert image"
+        android:text="Click here to insert image"
+        android:textSize="25dp"
+        android:textColor="#FFC045"
         app:layout_constraintBottom_toBottomOf="@+id/attractionPic"
         app:layout_constraintEnd_toEndOf="@+id/attractionPic"
         app:layout_constraintStart_toStartOf="@+id/attractionPic"
@@ -51,8 +53,9 @@
         android:background="@drawable/edittextstyled"
         android:ems="10"
         android:gravity="start"
+
         android:hint="Description"
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine"
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
         android:textAlignment="textStart"
@@ -60,25 +63,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textviewName"
         app:layout_constraintVertical_bias="0.068" />
-
-    <EditText
-        android:id="@+id/textviewLoc"
-        android:layout_width="390dp"
-        android:layout_height="70dp"
-        android:background="@drawable/edittextstyled"
-        android:ems="10"
-        android:gravity="start"
-        android:hint="Location"
-        android:inputType="textPersonName"
-        android:paddingStart="10px"
-        android:paddingLeft="10px"
-        android:paddingTop="10px"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.619"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textviewDesc"
-        app:layout_constraintVertical_bias="0.095" />
 
     <EditText
         android:id="@+id/textviewName"
@@ -95,5 +79,46 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.36" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="8dp"
+        android:background="#242424"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textviewDesc"
+        app:srcCompat="@android:drawable/ic_menu_mylocation" />
+
+    <TextView
+        android:id="@+id/textViewAddress"
+        android:layout_width="408dp"
+        android:layout_height="37dp"
+        android:text="Address"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textSize="16dp"
+        android:textStyle="bold|italic"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/btnUpload"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton"
+        app:layout_constraintVertical_bias="0.375" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="104dp"
+        android:layout_height="21dp"
+        android:layout_marginStart="152dp"
+        android:text="Choose Location"
+        android:textColor="#FFFF"
+        android:textStyle="italic|bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -43,6 +43,7 @@
         app:layout_constraintVertical_bias="0.644" />
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Login"
@@ -83,5 +84,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.852" />
+
+    <TextView
+        android:id="@+id/textViewWarning"
+        android:layout_width="347dp"
+        android:layout_height="63dp"
+        android:text="Your Account has been Blocked, please check your email for more information!"
+        android:textAlignment="center"
+        android:textColor="#FF0000"
+        android:textSize="18dp"
+        android:textStyle="bold|italic"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

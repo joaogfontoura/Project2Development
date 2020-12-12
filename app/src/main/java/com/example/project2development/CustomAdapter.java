@@ -32,7 +32,7 @@ import java.util.HashMap;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
 
     Context context;
-    private ArrayList title, description, rating, user_email;
+    private ArrayList title, description, rating, username;
     private Button btnRemove;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -41,12 +41,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     // usado pra fazer log.d e debugar as variaveis
     private static final String TAG = "CustomAdapter";
 
-    CustomAdapter(Context context, ArrayList title, ArrayList description, ArrayList rating, ArrayList user_email){
+    CustomAdapter(Context context, ArrayList title, ArrayList description, ArrayList rating, ArrayList username){
         this.context = context;
         this.title = title;
         this.description = description;
         this.rating = rating;
-        this.user_email = user_email;
+        this.username = username;
     }
 
     @NonNull
@@ -59,7 +59,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        holder.user_email.setText(String.valueOf(user_email.get(position)));
+        holder.username.setText(String.valueOf(username.get(position)));
         holder.title.setText(String.valueOf(title.get(position)));
         holder.description.setText(String.valueOf(description.get(position)));
         holder.rating.setText(String.valueOf(rating.get(position)));
@@ -68,12 +68,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             @Override
             public void onClick(View view) {
 
-                String dUser_email = String.valueOf(user_email.get(position));
+                String dUser_email = String.valueOf(username.get(position));
                 String dDescription = String.valueOf(description.get(position));
                 String dRating = String.valueOf(rating.get(position));
 
                 db.collection("Review")
-                        .whereEqualTo("user_email",dUser_email)
+                        .whereEqualTo("username",dUser_email)
                         .whereEqualTo("description",dDescription)
                         .whereEqualTo("rating",dRating)
 
@@ -83,10 +83,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String documentid = document.getId();
-                                Log.d(TAG, "PEGANDO DOCUMENT ID= "+documentid);
 
                                 final String attId = document.getString("attraction_id");
-                                Log.d(TAG, "ATTRACTION ID: "+attId);
 
                                 db.collection("Review").document(documentid).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
@@ -119,18 +117,18 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     @Override
     public int getItemCount() {
-        return user_email.size();
+        return username.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView title, description, rating, user_email;
+        TextView title, description, rating, username;
         Button btnRemove, btnRemoveAtt;
 
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            user_email = itemView.findViewById(R.id.textViewUser);
+            username = itemView.findViewById(R.id.textViewUser);
             title = itemView.findViewById(R.id.textViewTitle);
             description = itemView.findViewById(R.id.textViewDescription);
             rating = itemView.findViewById(R.id.textViewRating);

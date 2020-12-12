@@ -7,20 +7,6 @@
     android:background="#242424"
     tools:context=".MainPage">
 
-    <Button
-        android:id="@+id/btnAttractions"
-        android:layout_width="203dp"
-        android:layout_height="55dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/buttonyellow"
-        android:text="Show Attractions"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.721" />
-
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="309dp"
@@ -47,18 +33,32 @@
         app:layout_constraintVertical_bias="0.004" />
 
     <Button
+        android:id="@+id/btnAttractions"
+        android:layout_width="203dp"
+        android:layout_height="55dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/buttonyellow"
+        android:text="List of Attractions"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.705" />
+
+    <Button
         android:id="@+id/btnLocation"
         android:layout_width="203dp"
         android:layout_height="55dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:background="@drawable/buttonyellow"
-        android:text="Get Location"
+        android:text="Attractions Near Me"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.597" />
+        app:layout_constraintVertical_bias="0.594" />
 
     <Button
         android:id="@+id/btnlogout"
@@ -72,7 +72,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.838" />
+        app:layout_constraintVertical_bias="0.821" />
+
+    <Button
+        android:id="@+id/btnListUsers"
+        android:layout_width="203dp"
+        android:layout_height="55dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/buttonyellow"
+        android:text="List of Users"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.434" />
 
     <ProgressBar
         android:id="@+id/progressBar"

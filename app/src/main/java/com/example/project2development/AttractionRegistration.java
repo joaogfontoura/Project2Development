@@ -16,10 +16,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.internal.LockOnGetVariable;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,6 +39,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class AttractionRegistration extends AppCompatActivity {
@@ -45,8 +48,11 @@ public class AttractionRegistration extends AppCompatActivity {
     private Button up;
     public Uri imageUri;
     private StorageReference mStorageRef;
-    private TextView tvimage,tvloc,tvdesc,tvname;
+    private TextView tvimage,tvdesc,tvname, tvaddress, tvchoose;
+    private ImageButton imgBtn;
     public static String generatedFilePath = "";
+
+    LatLng position;
 
     // usado pra fazer log.d e debugar as variaveis
     private static final String TAG = "AttractionRegistration";
@@ -60,17 +66,27 @@ public class AttractionRegistration extends AppCompatActivity {
 
         tvimage = findViewById(R.id.textviewImg);
         tvname = findViewById(R.id.textviewName);
-        tvloc= findViewById(R.id.textviewLoc);
         tvdesc = findViewById(R.id.textviewDesc);
+        tvchoose = findViewById(R.id.textView);
+        tvaddress = findViewById(R.id.textViewAddress);
         img = findViewById(R.id.attractionPic);
         up = findViewById(R.id.btnUpload);
         mStorageRef = FirebaseStorage.getInstance().getReference("Images");
 
+        imgBtn = findViewById(R.id.imageButton);
 
+        imgBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MapPicker.class);
+                startActivityForResult(intent, 2);
+            }
+        });
 
         img.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View view){
+
                 choosePicture();
 
             }
@@ -81,7 +97,12 @@ public class AttractionRegistration extends AppCompatActivity {
         up.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadPicture();
+
+
+                if(SetError()){
+                    uploadPicture();
+                }
+
             }
         });
 
@@ -90,7 +111,6 @@ public class AttractionRegistration extends AppCompatActivity {
 
 
     private void choosePicture() {
-
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -103,10 +123,36 @@ public class AttractionRegistration extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
+            if(requestCode == 1){
                 imageUri = data.getData();
                 img.setImageURI(imageUri);
                 tvimage.setVisibility(View.INVISIBLE);
+            }else if(requestCode == 2){
+
+                Bundle b = data.getExtras();
+
+                Double returnLatitude = b.getDouble("Lat");
+                Double returnLongitude = b.getDouble("Long");
+
+                position = new LatLng(returnLatitude,returnLongitude);
+
+                Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+
+                List<Address> addresses  = null;
+                try {
+                    addresses = geocoder.getFromLocation(position.latitude,position.longitude, 1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                tvchoose.setVisibility(View.INVISIBLE);
+                tvaddress.setText(addresses.get(0).getAddressLine(0));
+                tvaddress.setVisibility(View.VISIBLE);
+
+            }
+
+
+
 
 
 
@@ -119,12 +165,30 @@ public class AttractionRegistration extends AppCompatActivity {
 
     }
 
+    // VERIFY THE INPUT OF DATA AND SET ERROR
+    private boolean SetError(){
+        // HERE WE CHECK IF THE VALUES ARE NOT NULL
+        String name = tvname.getText().toString();
+        String description = tvdesc.getText().toString();
+        Boolean r = true;
+
+        if(name.isEmpty() || name.length() == 0){
+            tvname.setError("Please set a Name");
+            r=false;
+        }
+        if(description.isEmpty() || description.length() == 0){
+            tvdesc.setError("Please set a Description");
+            r=false;
+        }
+
+        return r;
+    }
+
     private void addAttraction(String filepath){
 
         // HERE WE ADD THE ATTRACTION TO FIRESTORE
         String name = tvname.getText().toString();
         String description = tvdesc.getText().toString();
-        String location = tvloc.getText().toString();
 
         CollectionReference cref = db.collection("Attraction Collection");
 
@@ -132,7 +196,7 @@ public class AttractionRegistration extends AppCompatActivity {
         data.put("Name",name);
         data.put("Description",description);
 
-        LatLng position = getLocationFromAddress(getApplicationContext(),location);
+
         double positionLat = position.latitude;
         double positionLng = position.longitude;
         GeoPoint geoPoint = new GeoPoint(positionLat, positionLng);
@@ -143,31 +207,7 @@ public class AttractionRegistration extends AppCompatActivity {
         data.put("Image",filepath);
 
         cref.add(data);
-        //
-    }
 
-    public LatLng getLocationFromAddress(Context context, String strAddress) {
-
-        Geocoder coder = new Geocoder(context);
-        List<Address> address;
-        LatLng p1 = null;
-
-        try {
-            // May throw an IOException
-            address = coder.getFromLocationName(strAddress, 5);
-            if (address == null) {
-                return null;
-            }
-
-            Address location = address.get(0);
-            p1 = new LatLng(location.getLatitude(), location.getLongitude() );
-
-        } catch (IOException ex) {
-
-            ex.printStackTrace();
-        }
-
-        return p1;
     }
 
     private void uploadPicture() {
@@ -176,7 +216,6 @@ public class AttractionRegistration extends AppCompatActivity {
 
     imageID=System.currentTimeMillis()+"."+ getExtension(imageUri);
     StorageReference riversRef = mStorageRef.child(imageID);
-
 
 
 

@@ -32,13 +32,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
 public class AttractionDetails extends AppCompatActivity {
 
-    ImageView AttImg;
-    TextView AttTitle;
+    ImageView AttImg, AttImgRating;
+    TextView AttTitle, AttRating;
     TextView AttDescription;
     private Button BtnAddReview, BtnRemoveAtt;
 
@@ -49,7 +50,7 @@ public class AttractionDetails extends AppCompatActivity {
 
     CustomAdapter customAdapter;
     RecyclerView recyclerView;
-    ArrayList<String> arr_title, arr_description, arr_attraction_id, arr_user_email,arr_rating;
+    ArrayList<String> arr_title, arr_description, arr_attraction_id, arr_username,arr_rating;
 
     // usado pra fazer log.d e debugar as variaveis
     private static final String TAG = "AttractionDetails";
@@ -66,6 +67,8 @@ public class AttractionDetails extends AppCompatActivity {
         AttImg = findViewById(R.id.attImg);
         AttTitle = findViewById(R.id.txtTitle);
         AttDescription = findViewById(R.id.txtDescription);
+        AttRating = findViewById(R.id.textViewRating);
+        AttImgRating = findViewById(R.id.imageViewRating);
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setNestedScrollingEnabled(false);
@@ -115,6 +118,34 @@ public class AttractionDetails extends AppCompatActivity {
             }
         });
 
+        CollectionReference mColRef = db.collection("Review");
+
+        mColRef.whereEqualTo("attraction_id",id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    Double sum_rating = 0.0;
+                    Double avg_rating = 0.0;
+                    int counter = 0;
+                    for(QueryDocumentSnapshot document : task.getResult()){
+                        sum_rating = sum_rating + Double.parseDouble(document.getString("rating"));
+                        counter = counter + 1;
+                    }
+                    if(sum_rating != 0){
+                        avg_rating = sum_rating / counter;
+                        DecimalFormat df = new DecimalFormat("0.00");
+                        AttRating.setText(df.format(avg_rating).toString());
+                    }else{
+                        AttRating.setVisibility(View.INVISIBLE);
+                        AttImgRating.setVisibility(View.INVISIBLE);
+                    }
+
+                }else{
+                    Log.d(TAG, "Error getting the reviews for this attraction", task.getException());
+                }
+            }
+        });
+
 
     }
 
@@ -124,7 +155,7 @@ public class AttractionDetails extends AppCompatActivity {
         arr_description = new ArrayList<>();
         arr_attraction_id = new ArrayList<>();
         arr_rating = new ArrayList<>();
-        arr_user_email = new ArrayList<>();
+        arr_username = new ArrayList<>();
 
         db.collection("Review").whereEqualTo("attraction_id", id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -135,12 +166,12 @@ public class AttractionDetails extends AppCompatActivity {
                         arr_description.add(document.getString("description"));
                         arr_attraction_id.add(document.getString("attraction_id"));
                         arr_rating.add(document.getString("rating"));
-                        arr_user_email.add(document.getString("user_email"));
+                        arr_username.add(document.getString("username"));
                     }
 
 
                     if(arr_title.isEmpty() == false){
-                        customAdapter = new CustomAdapter(getApplicationContext(), arr_title, arr_description, arr_rating, arr_user_email);
+                        customAdapter = new CustomAdapter(getApplicationContext(), arr_title, arr_description, arr_rating, arr_username);
                         recyclerView.setAdapter(customAdapter);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                     }
@@ -211,24 +242,6 @@ public class AttractionDetails extends AppCompatActivity {
                     }
                 });
 
-        // HERE WE WILL GRAB THE IMAGE URL TO DELETE IT
-/*
-        db.collection("Attraction Collection").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                image = documentSnapshot.getString("Image");
-
-                FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference httpsReference = storage.getReferenceFromUrl(image);
-                httpsReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "File Deleted Successfully!");
-                    }
-                });
-            }
-        });
-*/
 
         // HERE THE ATTRACTION WILL BE DELETED
         db.collection("Attraction Collection").document(id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {

@@ -15,12 +15,12 @@
 
     <ImageView
         android:id="@+id/attImg"
-        android:layout_width="match_parent"
-        android:layout_height="212dp"
+        android:layout_width="407dp"
+        android:layout_height="172dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -59,16 +59,16 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="387dp"
-        android:layout_height="wrap_content"
-        android:elevation="10dp"
+        android:layout_width="411dp"
+        android:layout_height="313dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="36dp"
+        android:elevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnAddReview"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/btnAddReview"
@@ -84,14 +84,36 @@
 
     <Button
         android:id="@+id/btnRemoveAtt"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="89dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="8dp"
         android:background="@drawable/buttonyellow"
-        android:text="Remove Att"
+        android:text="Remove Attraction"
         android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/btnAddReview"
         app:layout_constraintTop_toTopOf="@+id/btnAddReview" />
+
+    <TextView
+        android:id="@+id/textViewRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Rating"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewRating"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageViewRating"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:drawable/btn_star_big_on"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -21,13 +21,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    private EditText emailTextView, passwordTextView;
+    private EditText emailTextView, passwordTextView, usernameTextView;
     private Button Btn;
     ProgressBar progressBar;
 
@@ -47,6 +51,7 @@ public class RegistrationActivity extends AppCompatActivity {
         // initialising all views through id defined above
         emailTextView = findViewById(R.id.email);
         passwordTextView = findViewById(R.id.passwd);
+        usernameTextView = findViewById(R.id.username);
         Btn = findViewById(R.id.btnregister);
         progressBar = findViewById(R.id.progressBar);
 
@@ -66,12 +71,45 @@ public class RegistrationActivity extends AppCompatActivity {
     class RegistrationBtnListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            String email= emailTextView.getText().toString().trim();
+            final String email= emailTextView.getText().toString().trim();
             String password = passwordTextView.getText().toString().trim();
+            final String username = usernameTextView.getText().toString().trim();
+
+            CollectionReference mColRef = db.collection("User");
+
+            if (TextUtils.isEmpty(username)) {
+                usernameTextView.setError("Username is Required.");
+                return;
+            }
+
+            if (username.length() < 6) {
+                usernameTextView.setError("Username must be >= 6 characters.");
+                return;
+            }
+
+            mColRef.whereEqualTo("Username",username).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if(task.isSuccessful()){
+                        for(QueryDocumentSnapshot document : task.getResult()){
+                            usernameTextView.setError("Username Already Taken");
+                            return;
+                        }
+                    }
+                }
+            });
 
             // Validations for input email and password
             if (TextUtils.isEmpty(email)) {
                 emailTextView.setError("Email is Required.");
+                return;
+            }
+
+            String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher emailMatcher = pattern.matcher(email);
+            if(!emailMatcher.matches()){
+                emailTextView.setError("Email is invalid");
                 return;
             }
             if (TextUtils.isEmpty(password)) {
@@ -104,6 +142,9 @@ public class RegistrationActivity extends AppCompatActivity {
                         Map<String,Object> data = new HashMap<>();
                         data.put("Uid",uid);
                         data.put("Role","user");
+                        data.put("Username",username);
+                        data.put("Status","active");
+                        data.put("Email",email);
 
                         cref.add(data);
 
@@ -120,6 +161,7 @@ public class RegistrationActivity extends AppCompatActivity {
             });
         }
     }
+
 
 
 }
