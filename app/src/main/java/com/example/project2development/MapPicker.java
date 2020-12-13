@@ -3,18 +3,24 @@ package com.example.project2development;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -24,6 +30,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,6 +42,9 @@ public class MapPicker extends AppCompatActivity implements OnMapReadyCallback{
     private GoogleMap mMap;
     Button confirmBtn;
     LatLng coordinates;
+    Location currentLocation;
+    private static final int REQUEST_CODE = 101;
+    FusedLocationProviderClient fusedLocationProviderClient;
 
     private static final String TAG = "MapPicker";
 
@@ -41,6 +52,10 @@ public class MapPicker extends AppCompatActivity implements OnMapReadyCallback{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_picker);
+
+
+
+
 
         Button btn1 = (Button) findViewById(R.id.selectBtn);
 
@@ -65,17 +80,40 @@ public class MapPicker extends AppCompatActivity implements OnMapReadyCallback{
             }
         });
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
-
+        //fused location inicializer
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        fetchLastLocation();
     }
 
+    private void fetchLastLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
+            return;
+        }
+        Task<Location> task = fusedLocationProviderClient.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if(location != null){
+                    currentLocation = location;
+                    SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+                    supportMapFragment.getMapAsync(MapPicker.this);
 
+                }
+            }
+        });
+    }
 
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case REQUEST_CODE:
+                if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    fetchLastLocation();
+                }
+                break;
+        }
+    }
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -87,9 +125,10 @@ public class MapPicker extends AppCompatActivity implements OnMapReadyCallback{
      */
     @Override
     public void onMapReady(final GoogleMap googleMap) {
-        //LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+        LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 
-        LatLng latLng = new LatLng(-33.87365, 151.20689);
+        // SYDNEY FAKE POSITION FOR TEST PURPOSES
+        //LatLng latLng = new LatLng(-33.87365, 151.20689);
 
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getApplicationContext(), R.raw.map_style));
 

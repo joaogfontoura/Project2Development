@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -44,12 +45,14 @@ public class AttractionMenu extends AppCompatActivity implements OnMapReadyCallb
     // usado pra fazer log.d e debugar as variaveis
     private static final String TAG = "AttractionMenu";
 
-
+    private static final int REQUEST_CODE = 101;
     FusedLocationProviderClient fusedLocationProviderClient;
     Button BtnRefresh;
     private Marker mMarker;
     Location currentLocation;
-    private static final int REQUEST_CODE = 101;
+
+    private String isInfoWindowShownLat = "";
+    private String isInfoWindowShownLong = "";
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -96,9 +99,10 @@ public class AttractionMenu extends AppCompatActivity implements OnMapReadyCallb
 
     
     public void onMapReady(GoogleMap googleMap){
-        //LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+        LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 
-        LatLng latLng = new LatLng(-33.87365, 151.20689);
+        // SYDNEY FAKE POSITION FOR TEST PURPOSES
+        //LatLng latLng = new LatLng(-33.87365, 151.20689);
 
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getApplicationContext(), R.raw.map_style));
 
@@ -114,20 +118,71 @@ public class AttractionMenu extends AppCompatActivity implements OnMapReadyCallb
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                LatLng pos = marker.getPosition();
                 if(!"You are Here".equals(marker.getTitle())){
+                    if(isInfoWindowShownLat.equals(String.valueOf(pos.latitude)) && isInfoWindowShownLong.equals(String.valueOf(pos.longitude))){
 
-                    String attId = marker.getSnippet();
+                        LatLng latlnposition = marker.getPosition();
+                        GeoPoint geoposition = new GeoPoint(latlnposition.latitude, latlnposition.longitude);
+                        db.collection("Attraction Collection").whereEqualTo("Coordinates",geoposition).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if(task.isSuccessful()){
+                                    for(QueryDocumentSnapshot document : task.getResult()){
+                                        Intent markerDetails = new Intent(getApplicationContext(), AttractionDetails.class);
+                                        markerDetails.putExtra("Id",document.getId());
+                                        startActivity(markerDetails);
+                                    }
+                                }
+                            }
+                        });
 
-                    Intent markerDetails = new Intent(getApplicationContext(), AttractionDetails.class);
+                    }else{
+                        marker.showInfoWindow();
+                        isInfoWindowShownLat = String.valueOf(pos.latitude);
+                        isInfoWindowShownLong = String.valueOf(pos.longitude);
 
-                    markerDetails.putExtra("Id",attId);
-
-                    startActivity(markerDetails);
-
-
+                    }
+                }else{
+                    marker.showInfoWindow();
                 }
 
+
                 return false;
+            }
+        });
+
+        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                LatLng pos = marker.getPosition();
+                if(!"You are Here".equals(marker.getTitle())){
+                    if(isInfoWindowShownLat.equals(String.valueOf(pos.latitude)) && isInfoWindowShownLong.equals(String.valueOf(pos.longitude))){
+
+                        LatLng latlnposition = marker.getPosition();
+                        GeoPoint geoposition = new LatLonPoint(latlnposition.latitude, latlnposition.longitude);
+                        db.collection("Attraction Collection").whereEqualTo("Coordinates",geoposition).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if(task.isSuccessful()){
+                                    for(QueryDocumentSnapshot document : task.getResult()){
+                                        Intent markerDetails = new Intent(getApplicationContext(), AttractionDetails.class);
+                                        markerDetails.putExtra("Id",document.getId());
+                                        startActivity(markerDetails);
+                                    }
+                                }
+                            }
+                        });
+
+                    }else{
+                        marker.showInfoWindow();
+                        isInfoWindowShownLat = String.valueOf(pos.latitude);
+                        isInfoWindowShownLong = String.valueOf(pos.longitude);
+
+                    }
+                }else{
+                    marker.showInfoWindow();
+                }
             }
         });
 
@@ -141,6 +196,12 @@ public class AttractionMenu extends AppCompatActivity implements OnMapReadyCallb
                     fetchLastLocation();
                 }
                 break;
+        }
+    }
+
+    private static final class LatLonPoint extends GeoPoint {
+        public LatLonPoint(double latitude, double longitude) {
+            super((int) (latitude * 1E6), (int) (longitude * 1E6));
         }
     }
 
@@ -159,8 +220,9 @@ public class AttractionMenu extends AppCompatActivity implements OnMapReadyCallb
 
                     Marker mMarker = googleMap.addMarker(
                             new MarkerOptions()
+                                    .title(documentSnapshot.getString("Name"))
                                     .position(finalcoordinates)
-                                    .snippet(documentSnapshot.getId())
+
                     );
 
                 }

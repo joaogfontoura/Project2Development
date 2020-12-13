@@ -100,6 +100,7 @@ public class CustomAdapterAttList extends RecyclerView.Adapter<CustomAdapterAttL
             public void onClick(View v) {
                 String attId = String.valueOf(att_id.get(position));
                 Intent intent = new Intent(context, AttractionDetails.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("Id", attId);
                 context.startActivity(intent);
             }
