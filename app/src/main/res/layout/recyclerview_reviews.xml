@@ -60,22 +60,21 @@
                 android:id="@+id/textViewRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="144dp"
                 android:layout_marginTop="12dp"
                 android:text="Rating"
                 android:textColor="#000"
                 android:textSize="22sp"
-                app:layout_constraintStart_toEndOf="@+id/textViewUser"
+                app:layout_constraintEnd_toStartOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:background="@android:drawable/btn_star_big_on"
                 android:visibility="visible"
-                app:layout_constraintStart_toEndOf="@+id/textViewRating"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
